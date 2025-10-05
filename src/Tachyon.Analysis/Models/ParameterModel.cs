@@ -1,0 +1,1 @@
+﻿internal sealed record ParameterModel(string Name, string TypeName);

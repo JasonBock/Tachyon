@@ -56,6 +56,9 @@ dotnet_diagnostic.CA1812.severity = none
 # CA2007: Consider calling ConfigureAwait
 dotnet_diagnostic.CA2007.severity = none
 
+# CA2016: Forward the CancellationToken parameter to methods that take one
+dotnet_diagnostic.CA2016.severity = error
+
 # RS1024: Compare symbols correctly
 # TODO: Adding SymbolEqualityComparer.Default should fix this,
 # but...then it casts down to a ISymbol?, which leads to other problems.
