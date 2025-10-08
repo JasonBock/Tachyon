@@ -10,10 +10,11 @@ internal static class TestAssistants
 	internal static async Task RunGeneratorAsync<TGenerator>(string code,
 		IEnumerable<(string, string)> generatedSources,
 		SourceText additionalFileContent,
+		string[] interceptorNamespaces,
 		IEnumerable<MetadataReference>? additionalReferences = null)
 		where TGenerator : IIncrementalGenerator, new()
 	{
-		var test = new IncrementalGeneratorTest<TGenerator>(ReportDiagnostic.Default)
+		var test = new IncrementalGeneratorTest<TGenerator>(interceptorNamespaces, ReportDiagnostic.Default)
 		{
 			ReferenceAssemblies = TestAssistants.GetNet10(),
 			TestState =

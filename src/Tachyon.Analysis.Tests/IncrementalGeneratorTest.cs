@@ -10,7 +10,9 @@ internal sealed class IncrementalGeneratorTest<TIncrementalGenerator>
 	: CSharpSourceGeneratorTest<TIncrementalGenerator, DefaultVerifier>
 	where TIncrementalGenerator : IIncrementalGenerator, new()
 {
-	public IncrementalGeneratorTest(ReportDiagnostic generalDiagnosticOption = ReportDiagnostic.Default) =>
+	public IncrementalGeneratorTest(string[] interceptorNamespaces, ReportDiagnostic generalDiagnosticOption = ReportDiagnostic.Default)
+	{
+		this.InterceptorNamespaces = interceptorNamespaces;
 		this.SolutionTransforms.Add((solution, projectId) =>
 		{
 			ArgumentNullException.ThrowIfNull(solution);
@@ -24,13 +26,17 @@ internal sealed class IncrementalGeneratorTest<TIncrementalGenerator>
 
 			return solution;
 		});
+	}
 
-	protected override ParseOptions CreateParseOptions()
+   protected override ParseOptions CreateParseOptions()
 	{
 		var parseOptions = (CSharpParseOptions)base.CreateParseOptions();
 		return parseOptions
-			.WithLanguageVersion(LanguageVersion.Preview);
+			.WithLanguageVersion(LanguageVersion.Preview)
+			.WithFeatures([new("InterceptorsNamespaces", string.Join(";", this.InterceptorNamespaces))]);
 	}
+
+	internal string[] InterceptorNamespaces { get; }
 
 	private static class CSharpVerifierHelper
 	{
