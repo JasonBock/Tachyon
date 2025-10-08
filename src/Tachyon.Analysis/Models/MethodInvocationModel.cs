@@ -1,4 +1,10 @@
-﻿namespace Tachyon.Analysis.Models;
+﻿using Microsoft.CodeAnalysis.CSharp;
+
+namespace Tachyon.Analysis.Models;
 
 internal sealed record MethodInvocationModel(
-	string Name, string ContainingTypeName, EquatableArray<ParameterModel> Parameters, string ReturnTypeName);
+	string Signature,
+	string Name, string ContainingTypeName, string? ContainingTypeNamespace,
+	bool IsStatic,
+	EquatableArray<ParameterModel> Parameters, string ReturnTypeName,
+	InterceptableLocation Location);
