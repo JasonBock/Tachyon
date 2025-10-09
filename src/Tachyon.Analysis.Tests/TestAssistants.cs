@@ -1,6 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Testing;
-using Microsoft.CodeAnalysis.Text;
 using NuGet.Frameworks;
 
 namespace Tachyon.Analysis.Tests;
@@ -9,7 +8,6 @@ internal static class TestAssistants
 {
 	internal static async Task RunGeneratorAsync<TGenerator>(string code,
 		IEnumerable<(string, string)> generatedSources,
-		SourceText additionalFileContent,
 		string[] interceptorNamespaces,
 		IEnumerable<MetadataReference>? additionalReferences = null)
 		where TGenerator : IIncrementalGenerator, new()
@@ -23,8 +21,6 @@ internal static class TestAssistants
 				OutputKind = OutputKind.DynamicallyLinkedLibrary,
 			},
 		};
-
-		test.TestState.AdditionalFiles.Add(("tachyon.txt", additionalFileContent));
 
 		foreach (var (generatedFileName, generatedCode) in generatedSources)
 		{

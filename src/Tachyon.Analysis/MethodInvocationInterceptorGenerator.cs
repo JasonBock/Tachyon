@@ -14,41 +14,6 @@ internal sealed class MethodInvocationInterceptorGenerator
 {
 	public void Initialize(IncrementalGeneratorInitializationContext context)
 	{
-		// TODO: Make sure we only get one. If there are none,
-		// that's kind of an issue.
-
-		// TODO: For the POC,
-		// it's expected that the text file will have a format like this:
-		/*
-		global::System.Guid.NewGuid
-		global::MyLibrary.MyNamespace
-		global::MyLibrary
-		*/
-		// I'll probably need to make this JSON or XML to potentially provide
-		// more configuration options.
-		var configurationFiles = context.AdditionalTextsProvider
-			.Where(_ => _.Path.EndsWith("tachyon.txt"))
-			.Select((text, token) =>
-			{
-				var filters = new HashSet<string>();
-				var sourceText = text.GetText(token);
-
-				if (sourceText is not null)
-				{
-					foreach (var lineText in from line in sourceText.Lines
-													 where line.Text is not null
-													 let lineText = line.Text!.ToString()
-													 where !string.IsNullOrWhiteSpace(lineText)
-													 select lineText)
-					{
-						_ = filters.Add(lineText);
-					}
-				}
-
-				return new EquatableArray<string>([.. filters]);
-			})
-			.Collect();
-
 		var models = context.SyntaxProvider.CreateSyntaxProvider(
 			(node, token) => node is InvocationExpressionSyntax,
 			(context, token) =>
@@ -74,11 +39,7 @@ internal sealed class MethodInvocationInterceptorGenerator
 					// TODO: I believe it's OK to capture InterceptableLocation
 					// in your own model, but need to verify that.
 
-					// TODO: The signature...maybe we could use the hash code of the display string
-					// to save a bit on space.
-
 					return new MethodInvocationModel(
-						invocationSymbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat),
 						invocationSymbol.Name,
 						invocationSymbol.ContainingType.Name,
 						@namespace,
@@ -91,11 +52,13 @@ internal sealed class MethodInvocationInterceptorGenerator
 				return null;
 			})
 			.Where(model => model is not null)
-			//.Combine(configurationFiles)
-			//.Where(provider =>
-			//	provider.Right.Length > 0 &&
-			//	provider.Right[0].Any(filter => $"{provider.Left!.ContainingTypeName}.{provider.Left.Name}".StartsWith(filter)))
-			//.Select((provider, token) => provider.Left)
+			.Combine(context.ParseOptionsProvider)
+			.Where(provider =>
+				provider.Right.Features.Count > 0 &&
+				provider.Right.Features.Any(filter => 
+					filter.Key == "InterceptorsNamespaces" &&
+					filter.Value.Split(';').Contains(provider.Left!.ContainingTypeNamespace)))
+			.Select((provider, token) => provider.Left)
 			.Collect();
 
 		context.RegisterSourceOutput(models, MethodInvocationInterceptorGenerator.CreateOutput);
@@ -105,11 +68,7 @@ internal sealed class MethodInvocationInterceptorGenerator
 	{
 		if (source.Length > 0)
 		{
-			var methodGroups = source.GroupBy(model => model!.ContainingTypeNamespace);
-
-			var methodText = MethodInvocationBuilder.Build(methodGroups);
-
-			context.AddSource("MethodInterceptors.g.cs", methodText);
+			context.AddSource("MethodInterceptors.g.cs", MethodInvocationBuilder.Build(source));
 		}
 	}
 }

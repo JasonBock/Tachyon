@@ -56,14 +56,11 @@ internal static class MethodInvocationInterceptorGeneratorTests
 			
 			"""";
 
-		//error CS9137: The 'interceptors' feature is not enabled in this namespace. Add '<InterceptorsNamespaces>$(InterceptorsNamespaces);MyNamespace</InterceptorsNamespaces>' to your project.
-
 		await TestAssistants.RunGeneratorAsync<MethodInvocationInterceptorGenerator>(
 			code,
 			[
 				("MethodInterceptors.g.cs", interceptionCode)
 			],
-			SourceText.From("global::MyNamespace.MyType", Encoding.UTF8),
 			["MyNamespace"]);
 	}
 }

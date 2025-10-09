@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis.Text;
 using Rocks.Analysis.Extensions;
 using System.CodeDom.Compiler;
+using System.Collections.Immutable;
 using System.Text;
 using Tachyon.Analysis.Models;
 
@@ -8,7 +9,7 @@ namespace Tachyon.Analysis.Builders;
 
 internal static class MethodInvocationBuilder
 {
-	internal static SourceText Build(IEnumerable<IGrouping<string?, MethodInvocationModel?>> namespaceGroups)
+	internal static SourceText Build(ImmutableArray<MethodInvocationModel?> models)
 	{
 		using var writer = new StringWriter();
 		using var indentWriter = new IndentedTextWriter(writer, "\t");
@@ -36,6 +37,7 @@ internal static class MethodInvocationBuilder
 
 		// For each group, we emit the namespace of the containing type.
 		// If it's null, then we don't emit a namespace
+		var namespaceGroups = models.GroupBy(model => model!.ContainingTypeNamespace);
 
 		foreach (var namespaceGroup in namespaceGroups)
 		{
@@ -66,7 +68,7 @@ internal static class MethodInvocationBuilder
 					""");
 				indentWriter.Indent++;
 
-				var methodGroups = typeGroup.GroupBy(model => model!.Signature);
+				var methodGroups = typeGroup.GroupBy(model => model!.ToString());
 
 				foreach (var methodGroup in methodGroups)
 				{
