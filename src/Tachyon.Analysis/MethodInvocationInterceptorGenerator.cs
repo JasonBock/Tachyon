@@ -36,15 +36,14 @@ internal sealed class MethodInvocationInterceptorGenerator
 							null :
 						null;
 
-					// TODO: I believe it's OK to capture InterceptableLocation
-					// in your own model, but need to verify that.
-
 					return new MethodInvocationModel(
 						invocationSymbol.Name,
 						invocationSymbol.ContainingType.Name,
+						invocationSymbol.ContainingType.GetFullyQualifiedName(context.SemanticModel.Compilation),
 						@namespace,
 						invocationSymbol.IsStatic,
 						parameters,
+						!invocationSymbol.ReturnsVoid,
 						invocationSymbol.ReturnType.GetFullyQualifiedName(context.SemanticModel.Compilation),
 						location);
 				}

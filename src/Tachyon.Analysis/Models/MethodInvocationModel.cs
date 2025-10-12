@@ -3,10 +3,15 @@
 namespace Tachyon.Analysis.Models;
 
 internal sealed record MethodInvocationModel(
-	string Name, string ContainingTypeName, string? ContainingTypeNamespace,
+	string Name, 
+	string ContainingTypeName,
+	string FullyQualifiedContainingTypeName,
+	string? ContainingTypeNamespace,
 	bool IsStatic,
-	EquatableArray<ParameterModel> Parameters, string ReturnTypeName,
+	EquatableArray<ParameterModel> Parameters, 
+	bool HasReturnValue,
+	string FullyQualifiedReturnTypeName,
 	InterceptableLocation Location)
 {
-	public override string ToString() => $"{this.ReturnTypeName} {this.ContainingTypeName}.{this.Name}({string.Join(", ", this.Parameters.Select(parameter => parameter.TypeName))})";
+	public override string ToString() => $"{this.FullyQualifiedReturnTypeName} {this.ContainingTypeName}.{this.Name}({string.Join(", ", this.Parameters.Select(parameter => parameter.TypeName))})";
 }

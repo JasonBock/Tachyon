@@ -1,5 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Testing;
+using Microsoft.Extensions.Logging;
 using NuGet.Frameworks;
 
 namespace Tachyon.Analysis.Tests;
@@ -28,6 +29,7 @@ internal static class TestAssistants
 		}
 
 		test.TestState.AdditionalReferences.Add(typeof(TGenerator).Assembly);
+		test.TestState.AdditionalReferences.Add(typeof(ILogger).Assembly);
 
 		if (additionalReferences is not null)
 		{

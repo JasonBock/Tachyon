@@ -18,6 +18,8 @@ internal static class MethodInvocationBuilder
 			"""
 			#nullable enable
 
+			using Microsoft.Extensions.Logging;
+
 			namespace System.Runtime.CompilerServices
 			{
 				[global::System.Diagnostics.Conditional("DEBUG")]
@@ -30,6 +32,14 @@ internal static class MethodInvocationBuilder
 						_ = version;
 						_ = data;
 					}
+				}
+			}
+
+			namespace Tachyon
+			{
+				public static class TachyonContext
+				{
+					public static global::Microsoft.Extensions.Logging.ILogger? Logger { get; set; }
 				}
 			}
 
@@ -87,24 +97,75 @@ internal static class MethodInvocationBuilder
 							""");
 					}
 
+					// TODO: Need to steal the variable naming context type
+					// from Rocks to ensure names are unique.
+
 					var parameters = string.Join(", ",
 						methodInformation!.Parameters.Select(parameter => $"{parameter.TypeName} {parameter.Name}"));
 
 					if (!methodInformation.IsStatic)
 					{
 						parameters = string.Join(", ",
-							$"this {methodInformation.ContainingTypeName} @self", parameters);
+							$"this {methodInformation.FullyQualifiedContainingTypeName} @self", parameters);
 					}
-					
+
 					indentWriter.WriteLines(
 						$$"""
-						public static {{methodInformation.ReturnTypeName}} {{methodInformation.Name}}({{parameters}})
+						public static {{methodInformation.FullyQualifiedReturnTypeName}} {{methodInformation.Name}}({{parameters}})
 						{
 						""");
 
 					indentWriter.Indent++;
 
-					// TODO: Log the call.
+					indentWriter.WriteLines(
+						$$""""
+						using var scope = global::Tachyon.TachyonContext.Logger?.BeginScope(global::System.Guid.NewGuid());
+						global::Tachyon.TachyonContext.Logger?.LogInformation(
+							"""
+							Method Invocation:
+								Type: {{methodInformation.FullyQualifiedContainingTypeName}}
+								Is Instance: {{!methodInformation.IsStatic}}
+								Method Name: {{methodInformation.Name}}
+								Parameters: {{string.Join(", ", methodInformation.Parameters.Select(parameter => $$"""{{{parameter.Name}}}"""))}}
+						"""");
+
+					if (methodInformation.Parameters.Length == 0)
+					{
+						indentWriter.WriteLine(
+							""""
+								""");
+							"""");
+					}
+					else
+					{
+						indentWriter.WriteLine(
+							$""""
+								""", {string.Join(", ", methodInformation.Parameters.Select(parameter => $$"""{{parameter.Name}}"""))});
+							"""");
+					}
+
+					var targetInvocation = methodInformation.IsStatic ?
+						methodInformation.FullyQualifiedContainingTypeName :
+						"@self";
+
+					var returnValue = methodInformation.HasReturnValue ?
+						"var @returnValue = " :
+						string.Empty;
+
+					// TODO: Need to make sure "in/out/ref", etc. are in the call site.
+					indentWriter.WriteLine($"{returnValue}{targetInvocation}.{methodInformation.Name}({string.Join(", ", methodInformation.Parameters.Select(parameter => $$"""{{parameter.Name}}"""))});");
+
+					if (methodInformation.HasReturnValue)
+					{
+						indentWriter.WriteLines(
+							$$""""
+							global::Tachyon.TachyonContext.Logger?.LogInformation(
+								"""
+								Method Invocation:
+									Return Value: {ReturnValue}
+								""", @returnValue);
+							"""");
+					}
 
 					indentWriter.Indent--;
 					indentWriter.WriteLine("}");
