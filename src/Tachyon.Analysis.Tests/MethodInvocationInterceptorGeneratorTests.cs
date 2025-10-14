@@ -67,7 +67,7 @@ internal static class MethodInvocationInterceptorGeneratorTests
 								Is Instance: False
 								Method Name: MyMethod
 								Parameters: {value}
-						""", value);
+							""", value);
 			
 						global::MyNamespace.MyType.MyMethod(value);
 					}
@@ -191,7 +191,7 @@ internal static class MethodInvocationInterceptorGeneratorTests
 								Is Instance: False
 								Method Name: MyMethod
 								Parameters: {value}
-						""", value);
+							""", value);
 			
 						var @returnValue = global::MyNamespace.MyType.MyMethod(value);
 						

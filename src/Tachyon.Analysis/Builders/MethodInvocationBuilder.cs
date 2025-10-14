@@ -140,7 +140,7 @@ internal static class MethodInvocationBuilder
 						{
 							indentWriter.WriteLine(
 								""""
-								""");
+									""");
 
 								"""");
 						}
@@ -148,7 +148,7 @@ internal static class MethodInvocationBuilder
 						{
 							indentWriter.WriteLine(
 								$""""
-								""", {string.Join(", ", methodInformation.Parameters.Select(parameter => $$"""{{parameter.Name}}"""))});
+									""", {string.Join(", ", methodInformation.Parameters.Select(parameter => $$"""{{parameter.Name}}"""))});
 
 								"""");
 						}

@@ -9,4 +9,5 @@
   </Folder>
   <Project Path="Tachyon.Analysis.Tests/Tachyon.Analysis.Tests.csproj" />
   <Project Path="Tachyon.Analysis/Tachyon.Analysis.csproj" />
+  <Project Path="Tachyon.Example/Tachyon.Example.csproj" Id="7f5d039b-f1de-44b7-b542-ed4565c0c9cd" />
 </Solution>
