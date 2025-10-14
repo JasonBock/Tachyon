@@ -28,6 +28,14 @@ internal static class MethodInvocationInterceptorGeneratorTests
 			
 			using Microsoft.Extensions.Logging;
 			
+			namespace Tachyon
+			{
+				public static class TachyonContext
+				{
+					public static global::Microsoft.Extensions.Logging.ILogger? Logger { get; set; }
+				}
+			}
+			
 			namespace System.Runtime.CompilerServices
 			{
 				[global::System.Diagnostics.Conditional("DEBUG")]
@@ -43,14 +51,6 @@ internal static class MethodInvocationInterceptorGeneratorTests
 				}
 			}
 			
-			namespace Tachyon
-			{
-				public static class TachyonContext
-				{
-					public static global::Microsoft.Extensions.Logging.ILogger? Logger { get; set; }
-				}
-			}
-			
 			namespace MyNamespace
 			{
 				static file class MyTypeInterceptors
@@ -59,6 +59,7 @@ internal static class MethodInvocationInterceptorGeneratorTests
 					public static void MyMethod(int value)
 					{
 						using var scope = global::Tachyon.TachyonContext.Logger?.BeginScope(global::System.Guid.NewGuid());
+						
 						global::Tachyon.TachyonContext.Logger?.LogInformation(
 							"""
 							Method Invocation:
@@ -66,7 +67,8 @@ internal static class MethodInvocationInterceptorGeneratorTests
 								Is Instance: False
 								Method Name: MyMethod
 								Parameters: {value}
-							""", value);
+						""", value);
+			
 						global::MyNamespace.MyType.MyMethod(value);
 					}
 				}
@@ -100,9 +102,27 @@ internal static class MethodInvocationInterceptorGeneratorTests
 			}
 			""";
 
+		var interceptionCode =
+			""""
+			#nullable enable
+			
+			using Microsoft.Extensions.Logging;
+			
+			namespace Tachyon
+			{
+				public static class TachyonContext
+				{
+					public static global::Microsoft.Extensions.Logging.ILogger? Logger { get; set; }
+				}
+			}
+
+			"""";
+
 		await TestAssistants.RunGeneratorAsync<MethodInvocationInterceptorGenerator>(
 			code,
-			[],
+			[
+				("MethodInterceptors.g.cs", interceptionCode)
+			],
 			["OtherNamespace"]);
 	}
 
@@ -130,6 +150,16 @@ internal static class MethodInvocationInterceptorGeneratorTests
 			""""
 			#nullable enable
 			
+			using Microsoft.Extensions.Logging;
+			
+			namespace Tachyon
+			{
+				public static class TachyonContext
+				{
+					public static global::Microsoft.Extensions.Logging.ILogger? Logger { get; set; }
+				}
+			}
+			
 			namespace System.Runtime.CompilerServices
 			{
 				[global::System.Diagnostics.Conditional("DEBUG")]
@@ -152,6 +182,26 @@ internal static class MethodInvocationInterceptorGeneratorTests
 					[global::System.Runtime.CompilerServices.InterceptsLocation(1, "iaYfA9qe9zj01zBG4rlY7QIBAABUZXN0MC5jcw==")] // /0/Test0.cs(12,48))
 					public static global::MyNamespace.MyCustomType MyMethod(global::MyNamespace.MyCustomType value)
 					{
+						using var scope = global::Tachyon.TachyonContext.Logger?.BeginScope(global::System.Guid.NewGuid());
+						
+						global::Tachyon.TachyonContext.Logger?.LogInformation(
+							"""
+							Method Invocation:
+								Type: global::MyNamespace.MyType
+								Is Instance: False
+								Method Name: MyMethod
+								Parameters: {value}
+						""", value);
+			
+						var @returnValue = global::MyNamespace.MyType.MyMethod(value);
+						
+						global::Tachyon.TachyonContext.Logger?.LogInformation(
+							"""
+							Method Invocation:
+								Return Value: {ReturnValue}
+							""", @returnValue);
+						
+						return @returnValue;
 					}
 				}
 			}

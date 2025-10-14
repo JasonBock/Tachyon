@@ -54,7 +54,7 @@ internal sealed class MethodInvocationInterceptorGenerator
 			.Combine(context.ParseOptionsProvider)
 			.Where(provider =>
 				provider.Right.Features.Count > 0 &&
-				provider.Right.Features.Any(filter => 
+				provider.Right.Features.Any(filter =>
 					filter.Key == "InterceptorsNamespaces" &&
 					filter.Value.Split(';').Contains(provider.Left!.ContainingTypeNamespace)))
 			.Select((provider, token) => provider.Left)
@@ -63,11 +63,6 @@ internal sealed class MethodInvocationInterceptorGenerator
 		context.RegisterSourceOutput(models, MethodInvocationInterceptorGenerator.CreateOutput);
 	}
 
-	private static void CreateOutput(SourceProductionContext context, ImmutableArray<MethodInvocationModel?> source)
-	{
-		if (source.Length > 0)
-		{
-			context.AddSource("MethodInterceptors.g.cs", MethodInvocationBuilder.Build(source));
-		}
-	}
+   private static void CreateOutput(SourceProductionContext context, ImmutableArray<MethodInvocationModel?> source) => 
+		context.AddSource("MethodInterceptors.g.cs", MethodInvocationBuilder.Build(source));
 }
