@@ -799,4 +799,119 @@ internal static class MethodInvocationInterceptorGeneratorTests
 			],
 			["MyNamespace"]);
 	}
+
+	[Test]
+	public static async Task GenerateWithMultipleNamespacesAsync()
+	{
+		var code =
+			"""
+			using AnotherNamespace;
+			using MyNamespace;
+
+			namespace AnotherNamespace
+			{
+				public static class AnotherType
+				{
+					public static void AnotherMethod() { }
+				}
+			}
+			
+			namespace MyNamespace
+			{
+				public static class MyType
+				{
+					public static void MyMethod() { }
+				}
+			}
+
+
+			public static class Invoker
+			{
+				public static void Invoke()
+				{
+					AnotherType.AnotherMethod();
+					MyType.MyMethod();
+				}
+			}
+			""";
+
+		var interceptionCode =
+			""""
+			#nullable enable
+			
+			using Microsoft.Extensions.Logging;
+			
+			namespace Tachyon
+			{
+				public static class TachyonContext
+				{
+					public static global::Microsoft.Extensions.Logging.ILogger? Logger { get; set; }
+				}
+			}
+			
+			namespace System.Runtime.CompilerServices
+			{
+				[global::System.Diagnostics.Conditional("DEBUG")]
+				[global::System.AttributeUsage(global::System.AttributeTargets.Method, AllowMultiple = true)]
+				sealed file class InterceptsLocationAttribute 
+					: global::System.Attribute
+				{
+					public InterceptsLocationAttribute(int version, string data)
+					{
+						_ = version;
+						_ = data;
+					}
+				}
+			}
+			
+			namespace AnotherNamespace
+			{
+				static file class AnotherTypeInterceptors
+				{
+					[global::System.Runtime.CompilerServices.InterceptsLocation(1, "YAbi4XgwmSHmrWlMZNyzL2IBAABUZXN0MC5jcw==")] // /0/Test0.cs(25,15))
+					public static void AnotherMethod()
+					{
+						global::Tachyon.TachyonContext.Logger?.LogInformation(
+							"""
+							Method Invocation:
+								Type: global::AnotherNamespace.AnotherType
+								Is Instance: False
+								Method Name: AnotherMethod
+								Parameters: 
+							""");
+			
+						global::AnotherNamespace.AnotherType.AnotherMethod();
+					}
+				}
+			}
+			namespace MyNamespace
+			{
+				static file class MyTypeInterceptors
+				{
+					[global::System.Runtime.CompilerServices.InterceptsLocation(1, "YAbi4XgwmSHmrWlMZNyzL30BAABUZXN0MC5jcw==")] // /0/Test0.cs(26,10))
+					public static void MyMethod()
+					{
+						global::Tachyon.TachyonContext.Logger?.LogInformation(
+							"""
+							Method Invocation:
+								Type: global::MyNamespace.MyType
+								Is Instance: False
+								Method Name: MyMethod
+								Parameters: 
+							""");
+			
+						global::MyNamespace.MyType.MyMethod();
+					}
+				}
+			}
+			
+			"""";
+
+		await TestAssistants.RunGeneratorAsync<MethodInvocationInterceptorGenerator>(
+			code,
+			[
+				("MethodInterceptors.g.cs", interceptionCode)
+			],
+			["AnotherNamespace", "MyNamespace"]);
+	}
 }

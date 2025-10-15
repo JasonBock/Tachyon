@@ -5,17 +5,16 @@ TODO:
 * DONE - Register the output to create the invocations
 * DONE - Always emit `TachyonContext`, so change `MethodInvocationBuilder.Build()` to use the `Length` of the array to gen the rest of the logging code, but it always emits `TachyonContext`.
 * Write tests
-    * Static
+    * DONE - Static
         * DONE - GenerateWithNoParametersAndVoidReturnAsync
-        * DONE - GenerateWithNoParametersAndVoidReturnAsync
-        * GeneraGenerateWithNoParametersAndReturnAsync
+        * DONE - GenerateWithNoParametersAndReturnAsync
         * DONE - GenerateWithParametersAndVoidReturnAsync
-        * GenerateWithParametersAndReturnAsync
-    * Instance
-        * GenerateWithNoParametersAndVoidReturnAsync
-        * GenerateWithNoParametersAndReturnAsync
-        * GenerateWithParametersAndVoidReturnAsync
-        * GenerateWithParametersAndReturnAsync
+        * DONE = GenerateWithParametersAndReturnAsync
+    * DONE - Instance
+        * DONE - GenerateWithNoParametersAndVoidReturnAsync
+        * DONE - GenerateWithNoParametersAndReturnAsync
+        * DONE - GenerateWithParametersAndVoidReturnAsync
+        * DONE - GenerateWithParametersAndReturnAsync
     * GenerateWithMultipleNamespaces
 * Write integration tests
 
