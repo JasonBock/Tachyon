@@ -2,7 +2,9 @@
 using Tachyon;
 using Tachyon.Example;
 
-using var factory = LoggerFactory.Create(builder => builder.AddConsole());
+#pragma warning disable CS0618 // Type or member is obsolete
+using var factory = LoggerFactory.Create(builder => builder.AddConsole(options => options.IncludeScopes = true));
+#pragma warning restore CS0618 // Type or member is obsolete
 var logger = factory.CreateLogger("Program");
 TachyonContext.Logger = logger;
 

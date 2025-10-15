@@ -106,27 +106,33 @@ internal static class MethodInvocationBuilder
 						// TODO: Need to steal the variable naming context type
 						// from Rocks to ensure names are unique.
 
-						var parameters = string.Join(", ",
-							methodInformation!.Parameters.Select(parameter => $"{parameter.TypeName} {parameter.Name}"));
+						var parameters = 
+							methodInformation!.Parameters.Select(parameter => $"{parameter.TypeName} {parameter.Name}").ToList();
 
 						if (!methodInformation.IsStatic)
 						{
-							parameters = string.Join(", ",
-								$"this {methodInformation.FullyQualifiedContainingTypeName} @self", parameters);
+							parameters.Insert(0, $"this {methodInformation.FullyQualifiedContainingTypeName} @self");
 						}
 
 						indentWriter.WriteLines(
 							$$"""
-							public static {{methodInformation.FullyQualifiedReturnTypeName}} {{methodInformation.Name}}({{parameters}})
+							public static {{methodInformation.FullyQualifiedReturnTypeName}} {{methodInformation.Name}}({{string.Join(", ", parameters)}})
 							{
 							""");
 
 						indentWriter.Indent++;
 
+						if(methodInformation.HasReturnValue)
+						{
+							indentWriter.WriteLines(
+								"""
+								using var scope = global::Tachyon.TachyonContext.Logger?.BeginScope(global::System.Guid.NewGuid());
+								
+								""");
+						}
+
 						indentWriter.WriteLines(
 							$$""""
-							using var scope = global::Tachyon.TachyonContext.Logger?.BeginScope(global::System.Guid.NewGuid());
-
 							global::Tachyon.TachyonContext.Logger?.LogInformation(
 								"""
 								Method Invocation:
