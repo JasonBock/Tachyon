@@ -10,4 +10,5 @@
   <Project Path="Tachyon.Analysis.Tests/Tachyon.Analysis.Tests.csproj" />
   <Project Path="Tachyon.Analysis/Tachyon.Analysis.csproj" />
   <Project Path="Tachyon.Example/Tachyon.Example.csproj" Id="7f5d039b-f1de-44b7-b542-ed4565c0c9cd" />
+  <Project Path="Tachyon.Package/Tachyon.Package.csproj" Id="619f5526-ae77-4ae9-903d-86053df5206d" />
 </Solution>

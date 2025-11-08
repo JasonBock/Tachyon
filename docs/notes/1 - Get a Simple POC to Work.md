@@ -15,8 +15,8 @@ TODO:
         * DONE - GenerateWithNoParametersAndReturnAsync
         * DONE - GenerateWithParametersAndVoidReturnAsync
         * DONE - GenerateWithParametersAndReturnAsync
-    * GenerateWithMultipleNamespaces
-* Write integration tests
+    * DONE - GenerateWithMultipleNamespaces
+* Write integration tests...maybe? Since `TachyonContext.Logger` is static, it's going to make it harder to see what exactly gets tested. I may need to ensure the tests are all synchronous and done in a certain order. Not ideal, but may be the only thing to do.
 
 Future Work (0.2.0)
 * Process the additional file to get a `EquatableArray<string>` of filtered methods
