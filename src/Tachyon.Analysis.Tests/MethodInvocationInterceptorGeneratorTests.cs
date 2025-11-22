@@ -1,11 +1,9 @@
-﻿using NUnit.Framework;
+﻿namespace Tachyon.Analysis.Tests;
 
-namespace Tachyon.Analysis.Tests;
-
-internal static class MethodInvocationInterceptorGeneratorTests
+public sealed class MethodInvocationInterceptorGeneratorTests
 {
 	[Test]
-	public static async Task GenerateInstanceCallWithNoParametersAndVoidReturnAsync()
+	public async Task GenerateInstanceCallWithNoParametersAndVoidReturnAsync()
 	{
 		var code =
 			"""
@@ -83,7 +81,7 @@ internal static class MethodInvocationInterceptorGeneratorTests
 	}
 
 	[Test]
-	public static async Task GenerateInstanceCallWithNoParametersAndReturnAsync()
+	public async Task GenerateInstanceCallWithNoParametersAndReturnAsync()
 	{
 		var code =
 			"""
@@ -171,7 +169,7 @@ internal static class MethodInvocationInterceptorGeneratorTests
 	}
 
 	[Test]
-	public static async Task GenerateInstanceCallWithParametersAndVoidReturnAsync()
+	public async Task GenerateInstanceCallWithParametersAndVoidReturnAsync()
 	{
 		var code =
 			"""
@@ -249,7 +247,7 @@ internal static class MethodInvocationInterceptorGeneratorTests
 	}
 
 	[Test]
-	public static async Task GenerateInstanceCallWithParametersAndReturnAsync()
+	public async Task GenerateInstanceCallWithParametersAndReturnAsync()
 	{
 		var code =
 			"""
@@ -337,7 +335,7 @@ internal static class MethodInvocationInterceptorGeneratorTests
 	}
 
 	[Test]
-	public static async Task GenerateStaticCallWithNoParametersAndVoidReturnAsync()
+	public async Task GenerateStaticCallWithNoParametersAndVoidReturnAsync()
 	{
 		var code =
 			"""
@@ -415,7 +413,7 @@ internal static class MethodInvocationInterceptorGeneratorTests
 	}
 
 	[Test]
-	public static async Task GenerateStaticCallWithNoParametersAndReturnAsync()
+	public async Task GenerateStaticCallWithNoParametersAndReturnAsync()
 	{
 		var code =
 			"""
@@ -503,7 +501,7 @@ internal static class MethodInvocationInterceptorGeneratorTests
 	}
 
 	[Test]
-	public static async Task GenerateStaticCallWithParametersAndVoidReturnAsync()
+	public async Task GenerateStaticCallWithParametersAndVoidReturnAsync()
 	{
 		var code =
 			"""
@@ -581,7 +579,7 @@ internal static class MethodInvocationInterceptorGeneratorTests
 	}
 
 	[Test]
-	public static async Task GenerateStaticCallWithParametersAndReturnAsync()
+	public async Task GenerateStaticCallWithParametersAndReturnAsync()
 	{
 		var code =
 			"""
@@ -669,7 +667,7 @@ internal static class MethodInvocationInterceptorGeneratorTests
 	}
 
 	[Test]
-	public static async Task GenerateWhenTargetTypeOfInvocationIsNotInNamespaceAsync()
+	public async Task GenerateWhenTargetTypeOfInvocationIsNotInNamespaceAsync()
 	{
 		var code =
 			"""
@@ -711,7 +709,7 @@ internal static class MethodInvocationInterceptorGeneratorTests
 	}
 
 	[Test]
-	public static async Task GenerateWithTypeInParameterAsFullyQualifiedNameAsync()
+	public async Task GenerateWithTypeInParameterAsFullyQualifiedNameAsync()
 	{
 		var code =
 			"""
@@ -801,7 +799,7 @@ internal static class MethodInvocationInterceptorGeneratorTests
 	}
 
 	[Test]
-	public static async Task GenerateWithMultipleNamespacesAsync()
+	public async Task GenerateWithMultipleNamespacesAsync()
 	{
 		var code =
 			"""

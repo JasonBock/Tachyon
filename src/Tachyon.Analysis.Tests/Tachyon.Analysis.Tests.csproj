@@ -2,9 +2,8 @@
 	<PropertyGroup>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<AssemblyName>Tachyon.Analysis.Tests</AssemblyName>
-		<EnableNUnitRunner>true</EnableNUnitRunner>
+		<OutputType>Exe</OutputType>
 		<RootNamespace>Tachyon.Analysis.Tests</RootNamespace>
-		<TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
 	</PropertyGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Tachyon.Analysis\Tachyon.Analysis.csproj" />
@@ -28,11 +27,6 @@
 		<Reference Include="$(PkgMicrosoft_CodeAnalysis_NetAnalyzers)\analyzers\dotnet\Microsoft.CodeAnalysis.NetAnalyzers.dll" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" />
 		<PackageReference Include="NuGet.Frameworks" />
-		<PackageReference Include="NUnit" />
-		<PackageReference Include="NUnit.Analyzers">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="NUnit3TestAdapter" />
+		<PackageReference Include="TUnit" />
 	</ItemGroup>
 </Project>

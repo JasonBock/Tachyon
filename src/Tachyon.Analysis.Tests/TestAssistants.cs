@@ -15,7 +15,7 @@ internal static class TestAssistants
 	{
 		var test = new IncrementalGeneratorTest<TGenerator>(interceptorNamespaces, ReportDiagnostic.Default)
 		{
-			ReferenceAssemblies = TestAssistants.GetNet10(),
+			ReferenceAssemblies = TestAssistants.net10ReferenceAssemblies.Value,
 			TestState =
 			{
 				Sources = { code },
@@ -39,7 +39,7 @@ internal static class TestAssistants
 		await test.RunAsync();
 	}
 
-	private static ReferenceAssemblies GetNet10()
+	private static readonly Lazy<ReferenceAssemblies> net10ReferenceAssemblies = new(() =>
 	{
 		// Always look here for the latest version of a particular runtime:
 		// https://www.nuget.org/packages/Microsoft.NETCore.App.Ref
@@ -53,7 +53,7 @@ internal static class TestAssistants
 			 "net10.0",
 			 new PackageIdentity(
 				  "Microsoft.NETCore.App.Ref",
-				  "10.0.0-rc.1.25451.107"),
+				  "10.0.0"),
 			 Path.Combine("ref", "net10.0"));
-	}
+	}, LazyThreadSafetyMode.ExecutionAndPublication);
 }
