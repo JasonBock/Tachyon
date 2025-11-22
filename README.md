@@ -6,7 +6,7 @@
 
 [![Issues](https://img.shields.io/github/issues/JasonBock/Tachyon)](https://github.com/JasonBock/Tachyon/issues)
 
-A library that automatically logs method invocations in an application.
+A generalized interception package in .NET
 
 ## Getting Started
 
