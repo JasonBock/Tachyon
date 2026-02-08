@@ -6,9 +6,7 @@
 		<PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing" Version="1.1.2" />
 		<PackageVersion Include="Microsoft.CodeAnalysis.CSharp.CodeRefactoring.Testing" Version="1.1.2" />
 		<PackageVersion Include="Microsoft.CodeAnalysis.CSharp.SourceGenerators.Testing" Version="1.1.2" />
-		<PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="5.0.0-2.final" />
 		<PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="10.0.100" />
-		<PackageVersion Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="5.0.0-2.final" />
 		<PackageVersion Include="Microsoft.Extensions.Logging" Version="10.0.0" />
 		<PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="10.0.0" />
 		<PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
