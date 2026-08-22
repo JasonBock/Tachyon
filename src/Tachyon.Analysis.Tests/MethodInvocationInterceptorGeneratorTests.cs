@@ -1,4 +1,6 @@
-﻿namespace Tachyon.Analysis.Tests;
+﻿using NUnit.Framework;
+
+namespace Tachyon.Analysis.Tests;
 
 public sealed class MethodInvocationInterceptorGeneratorTests
 {
